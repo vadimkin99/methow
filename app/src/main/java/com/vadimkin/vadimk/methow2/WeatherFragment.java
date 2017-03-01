@@ -1,6 +1,8 @@
 package com.vadimkin.vadimk.methow2;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -8,6 +10,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.json.JSONArray;
@@ -74,26 +77,33 @@ public class WeatherFragment extends Fragment {
         }
     }
 
+    TextView tvMazamaPeriod;
     TextView tvMazamaDescr;
+    ImageView ivMazamaIcon;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_weather, container, false);
         tvMazamaDescr = (TextView) view.findViewById(R.id.mazamaDescr);
+        ivMazamaIcon = (ImageView) view.findViewById(R.id.mazamaIcon);
+        tvMazamaPeriod = (TextView) view.findViewById(R.id.mazamaPeriod);
         return view;
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        new setWeatherFromUrl(tvMazamaDescr).execute(getMazamaUrl());
+        new setWeatherFromUrl(tvMazamaPeriod, tvMazamaDescr).execute(getMazamaUrl());
     }
 
     class setWeatherFromUrl extends AsyncTask<String, Void, String> {
 
         private TextView tvDescr;
-        setWeatherFromUrl(TextView tvDescr) {
+        private TextView tvPeriod;
+        setWeatherFromUrl(TextView tvPeriod, TextView tvDescr) {
+            this.tvPeriod = tvPeriod;
             this.tvDescr = tvDescr;
         }
 
@@ -115,7 +125,36 @@ public class WeatherFragment extends Fragment {
 
         @Override
         protected void onPostExecute(String weather) {
+            tvPeriod.setText(getPeriodFromWeather(weather));
             tvDescr.setText(getDescrFromWeather(weather));
+            new setImageFromUrl(ivMazamaIcon).execute(getIconUrlFromWeather(weather));
+        }
+    }
+
+    class setImageFromUrl extends AsyncTask<String, Void, Bitmap> {
+
+        private ImageView ivImage;
+        setImageFromUrl(ImageView iv) {
+            this.ivImage = iv;
+        }
+
+        @Override
+        protected Bitmap doInBackground(String... urls) {
+            try {
+                URL url = new URL(urls[0]);
+                URLConnection connection = url.openConnection();
+                InputStream inputStream = connection.getInputStream();
+                return BitmapFactory.decodeStream(inputStream);
+            } catch (MalformedURLException ex) {
+                return null;
+            } catch (IOException ex) {
+                return null;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(Bitmap bitmap) {
+            ivImage.setImageBitmap(bitmap);
         }
     }
 
@@ -137,6 +176,34 @@ public class WeatherFragment extends Fragment {
             JSONArray jArray = data.getJSONArray("text");
             String descr = jArray.getString(0);
             return descr;
+
+        } catch (JSONException ex) {
+            //TODO
+            return null;
+        }
+    }
+
+    String getPeriodFromWeather(String weaterJson) {
+        try {
+            JSONObject jsonObject = new JSONObject(weaterJson);
+            JSONObject time = jsonObject.getJSONObject("time");
+            JSONArray start = time.getJSONArray("startPeriodName");
+            String period = start.getString(0);
+            return period;
+
+        } catch (JSONException ex) {
+            //TODO
+            return null;
+        }
+    }
+
+    String getIconUrlFromWeather(String weatherJson) {
+        try {
+            JSONObject jsonObject = new JSONObject(weatherJson);
+            JSONObject data = jsonObject.getJSONObject("data");
+            JSONArray jArray = data.getJSONArray("iconLink");
+            String icon = jArray.getString(0);
+            return icon;
 
         } catch (JSONException ex) {
             //TODO
