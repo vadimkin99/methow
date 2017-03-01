@@ -14,9 +14,26 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:paddingLeft="10dp"
+        android:id="@+id/mazamaPeriod"
+        android:layout_below="@+id/mazamaTitle"/>
+
+    <ImageView
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:id="@+id/mazamaIcon"
+        android:layout_below="@+id/mazamaPeriod" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="5dp"
         android:text="@string/loading"
         android:id="@+id/mazamaDescr"
-        android:layout_below="@+id/mazamaTitle" />
+        android:layout_below="@+id/mazamaPeriod"
+        android:layout_toRightOf="@id/mazamaIcon" />
 
 
 </RelativeLayout>
