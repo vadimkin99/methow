@@ -128,7 +128,8 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
     private enum TabPosition {
         GROOMING(1),
         TRAILS(2),
-        WAX(3);
+        WAX(3),
+        WEATHER(4);
 
         private final int value;
         TabPosition(int value) {
@@ -143,6 +144,8 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
                     return TRAILS;
                 case 2:
                     return WAX;
+                case 3:
+                    return WEATHER;
                 default:
                     throw new IllegalArgumentException("Invalid tab number " + value);
             }
@@ -177,6 +180,8 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
                     return TrailsFragment.newInstance("", "");
                 case WAX:
                     return WaxFragment.newInstance("", "");
+                case WEATHER:
+                    return WeatherFragment.newInstance("", "");
                 default:
                     return PlaceholderFragment.newInstance(position + 1);
             }
@@ -185,7 +190,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
         @Override
         public int getCount() {
             // Show 3 total pages.
-            return 3;
+            return 4;
         }
 
         @Override
@@ -197,6 +202,8 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
                     return "Trails";
                 case 2:
                     return "Wax";
+                case 3:
+                    return "Weather";
             }
             return null;
         }
