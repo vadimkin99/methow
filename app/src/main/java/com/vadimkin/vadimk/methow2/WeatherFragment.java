@@ -161,6 +161,14 @@ public class WeatherFragment extends Fragment {
             tvPeriodNext.setText(getPeriodFromWeather(weather, 1));
             tvDescrNext.setText(getDescrFromWeather(weather, 1));
             new setImageFromUrl(ivIconNext).execute(getIconUrlFromWeather(weather, 1));
+
+            final MainActivity activity = (MainActivity) getActivity();
+            activity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    activity.progressBar.setVisibility(View.GONE);
+                }
+            });
         }
     }
 
