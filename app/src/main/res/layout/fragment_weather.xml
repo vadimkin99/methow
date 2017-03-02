@@ -1,39 +1,142 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="com.vadimkin.vadimk.methow2.WeatherFragment">
+    android:layout_height="match_parent">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/mazama"
-        android:id="@+id/mazamaTitle"
-        style="@style/Base.TextAppearance.AppCompat.Headline"/>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:shrinkColumns="1"
+            tools:context="com.vadimkin.vadimk.methow2.WeatherFragment">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingLeft="10dp"
-        android:id="@+id/mazamaPeriod"
-        android:layout_below="@+id/mazamaTitle"/>
+            <TableRow>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/mazama"
+                    android:id="@+id/mazamaTitle"
+                    android:layout_span="2"
+                    style="@style/Base.TextAppearance.AppCompat.Headline"/>
+            </TableRow>
 
-    <ImageView
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        android:id="@+id/mazamaIcon"
-        android:layout_below="@+id/mazamaPeriod" />
+            <TableRow>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="10dip"
+                    android:id="@+id/mazamaPeriod"
+                    android:layout_span="2"/>
+            </TableRow>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingTop="5dp"
-        android:text="@string/loading"
-        android:id="@+id/mazamaDescr"
-        android:layout_below="@+id/mazamaPeriod"
-        android:layout_toRightOf="@id/mazamaIcon" />
+            <TableRow>
+                <ImageView
+                    android:layout_width="80dip"
+                    android:layout_height="80dip"
+                    android:paddingLeft="10dip"
+                    android:paddingRight="10dip"
+                    android:id="@+id/mazamaIcon" />
 
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="5dip"
+                    android:text="@string/loading"
+                    android:paddingRight="10dip"
+                    android:id="@+id/mazamaDescr" />
+            </TableRow>
 
-</RelativeLayout>
+            <TableRow>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="10dip"
+                    android:id="@+id/mazamaPeriodNext"
+                    android:layout_span="2"/>
+            </TableRow>
+
+            <TableRow>
+                <ImageView
+                    android:layout_width="80dip"
+                    android:layout_height="80dip"
+                    android:paddingLeft="10dip"
+                    android:paddingRight="10dip"
+                    android:id="@+id/mazamaIconNext" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="5dip"
+                    android:paddingRight="10dip"
+                    android:text="@string/loading"
+                    android:id="@+id/mazamaDescrNext" />
+            </TableRow>
+
+            <TableRow>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/winthrop"
+                    android:id="@+id/winthropTitle"
+                    android:layout_span="2"
+                    style="@style/Base.TextAppearance.AppCompat.Headline"/>
+            </TableRow>
+
+            <TableRow>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="10dip"
+                    android:id="@+id/winthropPeriod"
+                    android:layout_span="2"/>
+            </TableRow>
+
+            <TableRow>
+                <ImageView
+                    android:layout_width="80dip"
+                    android:layout_height="80dip"
+                    android:paddingLeft="10dip"
+                    android:paddingRight="10dip"
+                    android:id="@+id/winthropIcon" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="5dip"
+                    android:text="@string/loading"
+                    android:paddingRight="10dip"
+                    android:id="@+id/winthropDescr" />
+            </TableRow>
+
+            <TableRow>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="10dip"
+                    android:id="@+id/winthropPeriodNext"
+                    android:layout_span="2"/>
+            </TableRow>
+
+            <TableRow>
+                <ImageView
+                    android:layout_width="80dip"
+                    android:layout_height="80dip"
+                    android:paddingLeft="10dip"
+                    android:paddingRight="10dip"
+                    android:id="@+id/winthropIconNext" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="5dip"
+                    android:paddingRight="10dip"
+                    android:text="@string/loading"
+                    android:id="@+id/winthropDescrNext" />
+            </TableRow>
+
+        </TableLayout>
+    </ScrollView>
+</LinearLayout>

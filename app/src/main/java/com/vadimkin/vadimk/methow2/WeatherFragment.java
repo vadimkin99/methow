@@ -81,6 +81,18 @@ public class WeatherFragment extends Fragment {
     TextView tvMazamaDescr;
     ImageView ivMazamaIcon;
 
+    TextView tvMazamaPeriodNext;
+    TextView tvMazamaDescrNext;
+    ImageView ivMazamaIconNext;
+
+    TextView tvWinthropPeriod;
+    TextView tvWinthropDescr;
+    ImageView ivWinthropIcon;
+
+    TextView tvWinthropPeriodNext;
+    TextView tvWinthropDescrNext;
+    ImageView ivWinthropIconNext;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -89,22 +101,40 @@ public class WeatherFragment extends Fragment {
         tvMazamaDescr = (TextView) view.findViewById(R.id.mazamaDescr);
         ivMazamaIcon = (ImageView) view.findViewById(R.id.mazamaIcon);
         tvMazamaPeriod = (TextView) view.findViewById(R.id.mazamaPeriod);
+        tvMazamaDescrNext = (TextView) view.findViewById(R.id.mazamaDescrNext);
+        ivMazamaIconNext = (ImageView) view.findViewById(R.id.mazamaIconNext);
+        tvMazamaPeriodNext = (TextView) view.findViewById(R.id.mazamaPeriodNext);
+        tvWinthropDescr = (TextView) view.findViewById(R.id.winthropDescr);
+        ivWinthropIcon = (ImageView) view.findViewById(R.id.winthropIcon);
+        tvWinthropPeriod = (TextView) view.findViewById(R.id.winthropPeriod);
+        tvWinthropDescrNext = (TextView) view.findViewById(R.id.winthropDescrNext);
+        ivWinthropIconNext = (ImageView) view.findViewById(R.id.winthropIconNext);
+        tvWinthropPeriodNext = (TextView) view.findViewById(R.id.winthropPeriodNext);
         return view;
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        new setWeatherFromUrl(tvMazamaPeriod, tvMazamaDescr).execute(getMazamaUrl());
+        new setWeatherFromUrl(tvMazamaPeriod, tvMazamaDescr, ivMazamaIcon, tvMazamaPeriodNext, tvMazamaDescrNext, ivMazamaIconNext).execute(getMazamaUrl());
+        new setWeatherFromUrl(tvWinthropPeriod, tvWinthropDescr, ivWinthropIcon, tvWinthropPeriodNext, tvWinthropDescrNext, ivWinthropIconNext).execute(getWinthropUrl());
     }
 
     class setWeatherFromUrl extends AsyncTask<String, Void, String> {
 
         private TextView tvDescr;
         private TextView tvPeriod;
-        setWeatherFromUrl(TextView tvPeriod, TextView tvDescr) {
+        private ImageView ivIcon;
+        private TextView tvDescrNext;
+        private TextView tvPeriodNext;
+        private ImageView ivIconNext;
+        setWeatherFromUrl(TextView tvPeriod, TextView tvDescr, ImageView ivIcon, TextView tvPeriodNext, TextView tvDescrNext, ImageView ivIconNext) {
             this.tvPeriod = tvPeriod;
             this.tvDescr = tvDescr;
+            this.ivIcon = ivIcon;
+            this.tvPeriodNext = tvPeriodNext;
+            this.tvDescrNext = tvDescrNext;
+            this.ivIconNext = ivIconNext;
         }
 
         @Override
@@ -125,9 +155,12 @@ public class WeatherFragment extends Fragment {
 
         @Override
         protected void onPostExecute(String weather) {
-            tvPeriod.setText(getPeriodFromWeather(weather));
-            tvDescr.setText(getDescrFromWeather(weather));
-            new setImageFromUrl(ivMazamaIcon).execute(getIconUrlFromWeather(weather));
+            tvPeriod.setText(getPeriodFromWeather(weather, 0));
+            tvDescr.setText(getDescrFromWeather(weather, 0));
+            new setImageFromUrl(ivIcon).execute(getIconUrlFromWeather(weather, 0));
+            tvPeriodNext.setText(getPeriodFromWeather(weather, 1));
+            tvDescrNext.setText(getDescrFromWeather(weather, 1));
+            new setImageFromUrl(ivIconNext).execute(getIconUrlFromWeather(weather, 1));
         }
     }
 
@@ -164,17 +197,22 @@ public class WeatherFragment extends Fragment {
 
     private final double MAZAMA_LAT = 48.5921;
     private final double MAZAMA_LON = -120.4040;
+    private final double WINTHROP_LAT = 48.4779;
+    private final double WINTHROP_LON = -120.1862;
 
     String getMazamaUrl() {
         return getWeatherUrl(MAZAMA_LAT, MAZAMA_LON);
     }
+    String getWinthropUrl() {
+        return getWeatherUrl(WINTHROP_LAT, WINTHROP_LON);
+    }
 
-    String getDescrFromWeather(String weaterJson) {
+    String getDescrFromWeather(String weaterJson, int periodIndex) {
         try {
             JSONObject jsonObject = new JSONObject(weaterJson);
             JSONObject data = jsonObject.getJSONObject("data");
             JSONArray jArray = data.getJSONArray("text");
-            String descr = jArray.getString(0);
+            String descr = jArray.getString(periodIndex);
             return descr;
 
         } catch (JSONException ex) {
@@ -183,12 +221,12 @@ public class WeatherFragment extends Fragment {
         }
     }
 
-    String getPeriodFromWeather(String weaterJson) {
+    String getPeriodFromWeather(String weaterJson, int periodIndex) {
         try {
             JSONObject jsonObject = new JSONObject(weaterJson);
             JSONObject time = jsonObject.getJSONObject("time");
             JSONArray start = time.getJSONArray("startPeriodName");
-            String period = start.getString(0);
+            String period = start.getString(periodIndex);
             return period;
 
         } catch (JSONException ex) {
@@ -197,12 +235,12 @@ public class WeatherFragment extends Fragment {
         }
     }
 
-    String getIconUrlFromWeather(String weatherJson) {
+    String getIconUrlFromWeather(String weatherJson, int periodIndex) {
         try {
             JSONObject jsonObject = new JSONObject(weatherJson);
             JSONObject data = jsonObject.getJSONObject("data");
             JSONArray jArray = data.getJSONArray("iconLink");
-            String icon = jArray.getString(0);
+            String icon = jArray.getString(periodIndex);
             return icon;
 
         } catch (JSONException ex) {
