@@ -31,21 +31,6 @@ public class GroomingWebViewClient extends WebViewClient {
     public GroomingWebViewClient(MainActivity activity) {
         this.activity = activity;
     }
-//
-//    @Override
-//    @SuppressWarnings("deprecation")
-//    public boolean shouldOverrideUrlLoading(WebView view, String url) {
-//        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-//        activity.startActivity(intent);
-//        return true;
-//    }
-//
-//    @TargetApi(Build.VERSION_CODES.N)
-//    public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
-//        Intent intent = new Intent(Intent.ACTION_VIEW, request.getUrl());
-//        activity.startActivity(intent);
-//        return true;
-//    }
 
     private final String conditionsUrl = "http://methowtrailsgrooming.org/conditions-iphone.php";
 
@@ -97,16 +82,29 @@ public class GroomingWebViewClient extends WebViewClient {
         return shouldInterceptRequest(view, request.getUrl().toString());
     }
 
+    private void activateProgressSpinner() {
+        activity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                activity.progressBar.setVisibility(View.VISIBLE);
+                activity.progressBar.getIndeterminateDrawable().setColorFilter(0xFFcccccc, android.graphics.PorterDuff.Mode.SRC_ATOP);
+            }
+        });
+    }
+
+    private void killProgressSpinner() {
+        activity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                activity.progressBar.setVisibility(View.GONE);
+            }
+        });
+    }
+
     private WebResourceResponse intercept(URL url) {
 
         try {
-            activity.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    activity.progressBar.setVisibility(View.VISIBLE);
-                    activity.progressBar.getIndeterminateDrawable().setColorFilter(0xFFcccccc, android.graphics.PorterDuff.Mode.SRC_ATOP);
-                }
-            });
+            activateProgressSpinner();
 
             String mimeType = "text/html";
             String encoding = "";
@@ -149,20 +147,18 @@ public class GroomingWebViewClient extends WebViewClient {
                     WebResourceResponse response = new WebResourceResponse(mimeType, encoding, stream);
                     return response;
                 } else {
+                    // Something went wrong, just take the unaltered content
                     return null;
                 }
             } catch (IOException ex) {
-                Log.e(Constants.LOG_TAG, "Network error interpting Grooming request: " + ex.getMessage());
+                Log.e(Constants.LOG_TAG, "Network error intercepting Grooming request: " + ex.getMessage());
             }
 
+            // Something went wrong, just take the unaltered content
             return null;
+
         } finally {
-            activity.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    activity.progressBar.setVisibility(View.GONE);
-                }
-            });
+            killProgressSpinner();
         }
     }
 }
