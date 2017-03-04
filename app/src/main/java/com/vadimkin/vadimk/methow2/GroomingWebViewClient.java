@@ -47,19 +47,48 @@ public class GroomingWebViewClient extends WebViewClient {
 //        return true;
 //    }
 
+    private final String conditionsUrl = "http://methowtrailsgrooming.org/conditions-iphone.php";
+
     @SuppressWarnings("deprecation")
     @Override
     public WebResourceResponse shouldInterceptRequest(WebView view, String url) {
-        if (url.startsWith("http://methowtrailsgrooming.org/conditions-iphone.php")) {
+        if (url.startsWith(conditionsUrl)) {
             try {
                 URL urlObj = new URL(url);
                 return intercept(urlObj);
             } catch (MalformedURLException ex) {
                 Log.e(Constants.LOG_TAG, "Bad grooming URL " + url);
             }
+        } else if (url.startsWith("https://store.methowtrails.org/info.php?redirect_to=%2Fdonate.php")) {
+            startExternalBrowser(url);
+            return interceptToConditionsPage();
         }
 
         return null;
+    }
+
+    /**
+     * Unconditional intercept to the Grooming page. For use in intercepting links from the Grooming
+     * page for which we start the external browser. After firing off the intent to the browser,
+     * we need to get back to Grooming.
+     * @return
+     */
+    private WebResourceResponse interceptToConditionsPage() {
+        URL conditionsUrlObj;
+        try {
+            conditionsUrlObj = new URL(conditionsUrl);
+        } catch (Exception ex) {
+            Log.e(Constants.LOG_TAG, "Bad grooming URL " + conditionsUrl);
+            return null;
+        }
+
+        return intercept(conditionsUrlObj);
+    }
+
+    private void startExternalBrowser(String url) {
+        Intent i = new Intent(Intent.ACTION_VIEW);
+        i.setData(Uri.parse(url));
+        activity.startActivity(i);
     }
 
     @TargetApi(Build.VERSION_CODES.N)
