@@ -217,10 +217,23 @@ public class WeatherFragment extends Fragment {
 
     String getDescrFromWeather(String weaterJson, int periodIndex) {
         try {
-            JSONObject jsonObject = new JSONObject(weaterJson);
-            JSONObject data = jsonObject.getJSONObject("data");
-            JSONArray jArray = data.getJSONArray("text");
-            String descr = jArray.getString(periodIndex);
+            JSONObject jsonObject = null;
+            JSONObject data = null;
+            JSONArray jArray = null;
+            String descr = null;
+
+            jsonObject = new JSONObject(weaterJson);
+            if (jsonObject != null) {
+                data = jsonObject.getJSONObject("data");
+            }
+            if (data != null) {
+                jArray = data.getJSONArray("text");
+            }
+
+            if (jArray != null) {
+                descr = jArray.getString(periodIndex);
+            }
+
             return descr;
 
         } catch (JSONException ex) {
@@ -230,25 +243,52 @@ public class WeatherFragment extends Fragment {
     }
 
     String getPeriodFromWeather(String weaterJson, int periodIndex) {
-        try {
-            JSONObject jsonObject = new JSONObject(weaterJson);
-            JSONObject time = jsonObject.getJSONObject("time");
-            JSONArray start = time.getJSONArray("startPeriodName");
-            String period = start.getString(periodIndex);
-            return period;
+        if (weaterJson != null) {
+            try {
+                JSONObject jsonObject = null;
+                JSONObject time = null;
+                JSONArray start = null;
+                String period = null;
 
-        } catch (JSONException ex) {
-            //TODO
+                jsonObject = new JSONObject(weaterJson);
+
+                if (jsonObject != null) {
+                    time = jsonObject.getJSONObject("time");
+                }
+                if (time != null) {
+                    start = time.getJSONArray("startPeriodName");
+                }
+                if (start != null) {
+                    period = start.getString(periodIndex);
+                }
+                return period;
+
+            } catch (JSONException ex) {
+                //TODO
+                return null;
+            }
+        } else {
             return null;
         }
     }
 
     String getIconUrlFromWeather(String weatherJson, int periodIndex) {
         try {
-            JSONObject jsonObject = new JSONObject(weatherJson);
-            JSONObject data = jsonObject.getJSONObject("data");
-            JSONArray jArray = data.getJSONArray("iconLink");
-            String icon = jArray.getString(periodIndex);
+            JSONObject jsonObject = null;
+            JSONObject data = null;
+            JSONArray jArray = null;
+            String icon = null;
+
+            jsonObject = new JSONObject(weatherJson);
+            if (jsonObject != null) {
+                data = jsonObject.getJSONObject("data");
+            }
+            if (data != null) {
+                jArray = data.getJSONArray("iconLink");
+            }
+            if (jArray != null) {
+                icon = jArray.getString(periodIndex);
+            }
             return icon;
 
         } catch (JSONException ex) {
