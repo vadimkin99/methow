@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 
 
 /**
@@ -68,7 +69,8 @@ public class TrailsFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_trails, container, false);
 
         WebView browser = (WebView) view.findViewById(R.id.trails);
-        browser.loadUrl("http://methowtrailsgrooming.org/grooming-iphone-ipad.php");
+        browser.setWebViewClient(new WebViewClient());
+        browser.loadUrl("http://methowtrails.org/grooming-iphone-ipad.php");
 
         return view;
     }

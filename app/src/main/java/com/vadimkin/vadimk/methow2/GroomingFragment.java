@@ -91,7 +91,7 @@ public class GroomingFragment extends Fragment {
         GroomingWebViewClient webViewClient = new GroomingWebViewClient((MainActivity) getActivity());
         browser.setWebViewClient(webViewClient);
 
-        browser.loadUrl("http://methowtrailsgrooming.org/conditions-iphone.php");
+        browser.loadUrl("http://methowtrails.org/conditions-iphone.php");
     }
 
     // TODO: Rename method, update argument and hook method into UI event

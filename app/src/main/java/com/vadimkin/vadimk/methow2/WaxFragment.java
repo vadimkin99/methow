@@ -69,7 +69,9 @@ public class WaxFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_wax, container, false);
 
         WebView browser = (WebView) view.findViewById(R.id.wax);
-        browser.loadUrl("http://www.methowdata.com/mvsta/waxing/waxing.cfm");
+        browser.setWebViewClient(new WebViewClient());
+        browser.getSettings().setJavaScriptEnabled(true);
+        browser.loadUrl("https://mv-wotd.blogspot.com/");
 
         return view;
     }

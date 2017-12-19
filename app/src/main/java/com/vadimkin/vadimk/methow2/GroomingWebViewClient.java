@@ -32,7 +32,7 @@ public class GroomingWebViewClient extends WebViewClient {
         this.activity = activity;
     }
 
-    private final String conditionsUrl = "http://methowtrailsgrooming.org/conditions-iphone.php";
+    private final String conditionsUrl = "http://methowtrails.org/conditions-iphone.php";
 
     @SuppressWarnings("deprecation")
     @Override
