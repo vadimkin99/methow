@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -77,6 +78,8 @@ public class WeatherFragment extends Fragment {
         }
     }
 
+    SwipeRefreshLayout mySwipeRefreshLayout;
+
     TextView tvMazamaPeriod;
     TextView tvMazamaDescr;
     ImageView ivMazamaIcon;
@@ -92,6 +95,14 @@ public class WeatherFragment extends Fragment {
     TextView tvWinthropPeriodNext;
     TextView tvWinthropDescrNext;
     ImageView ivWinthropIconNext;
+
+    TextView tvChicadeePeriod;
+    TextView tvChicadeeDescr;
+    ImageView ivChicadeeIcon;
+
+    TextView tvChicadeePeriodNext;
+    TextView tvChicadeeDescrNext;
+    ImageView ivChicadeeIconNext;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -110,14 +121,34 @@ public class WeatherFragment extends Fragment {
         tvWinthropDescrNext = (TextView) view.findViewById(R.id.winthropDescrNext);
         ivWinthropIconNext = (ImageView) view.findViewById(R.id.winthropIconNext);
         tvWinthropPeriodNext = (TextView) view.findViewById(R.id.winthropPeriodNext);
+        tvChicadeeDescr = (TextView) view.findViewById(R.id.chicadeeDescr);
+        ivChicadeeIcon = (ImageView) view.findViewById(R.id.chicadeeIcon);
+        tvChicadeePeriod = (TextView) view.findViewById(R.id.chicadeePeriod);
+        tvChicadeeDescrNext = (TextView) view.findViewById(R.id.chicadeeDescrNext);
+        ivChicadeeIconNext = (ImageView) view.findViewById(R.id.chicadeeIconNext);
+        tvChicadeePeriodNext = (TextView) view.findViewById(R.id.chicadeePeriodNext);
+        mySwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipeContainer);
+
+        mySwipeRefreshLayout.setOnRefreshListener( new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                refresh();
+                mySwipeRefreshLayout.setRefreshing(false);
+            }
+        });
         return view;
     }
 
     @Override
     public void onResume() {
         super.onResume();
+        refresh();
+    }
+
+    private void refresh() {
         new setWeatherFromUrl(tvMazamaPeriod, tvMazamaDescr, ivMazamaIcon, tvMazamaPeriodNext, tvMazamaDescrNext, ivMazamaIconNext).execute(getMazamaUrl());
         new setWeatherFromUrl(tvWinthropPeriod, tvWinthropDescr, ivWinthropIcon, tvWinthropPeriodNext, tvWinthropDescrNext, ivWinthropIconNext).execute(getWinthropUrl());
+        new setWeatherFromUrl(tvChicadeePeriod, tvChicadeeDescr, ivChicadeeIcon, tvChicadeePeriodNext, tvChicadeeDescrNext, ivChicadeeIconNext).execute(getChicadeeUrl());
     }
 
     class setWeatherFromUrl extends AsyncTask<String, Void, String> {
@@ -207,6 +238,8 @@ public class WeatherFragment extends Fragment {
     private final double MAZAMA_LON = -120.4040;
     private final double WINTHROP_LAT = 48.4779;
     private final double WINTHROP_LON = -120.1862;
+    private final double CHICADEE_LAT = 48.46282;
+    private final double CHICADEE_LON = -120.2631586;
 
     String getMazamaUrl() {
         return getWeatherUrl(MAZAMA_LAT, MAZAMA_LON);
@@ -214,6 +247,7 @@ public class WeatherFragment extends Fragment {
     String getWinthropUrl() {
         return getWeatherUrl(WINTHROP_LAT, WINTHROP_LON);
     }
+    String getChicadeeUrl() { return getWeatherUrl(CHICADEE_LAT, CHICADEE_LON); }
 
     String getDescrFromWeather(String weaterJson, int periodIndex) {
         if (weaterJson != null) {

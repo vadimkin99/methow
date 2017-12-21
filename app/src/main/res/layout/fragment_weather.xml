@@ -3,7 +3,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ScrollView
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/swipeContainer">
+    <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -136,7 +140,69 @@
                     android:text="@string/loading"
                     android:id="@+id/winthropDescrNext" />
             </TableRow>
+            <TableRow>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/chicadee"
+                    android:id="@+id/chicadeeTitle"
+                    android:layout_span="2"
+                    style="@style/Base.TextAppearance.AppCompat.Headline"/>
+            </TableRow>
+
+            <TableRow>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="10dip"
+                    android:id="@+id/chicadeePeriod"
+                    android:layout_span="2"/>
+            </TableRow>
+
+            <TableRow>
+                <ImageView
+                    android:layout_width="80dip"
+                    android:layout_height="80dip"
+                    android:paddingLeft="10dip"
+                    android:paddingRight="10dip"
+                    android:id="@+id/chicadeeIcon" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="5dip"
+                    android:text="@string/loading"
+                    android:paddingRight="10dip"
+                    android:id="@+id/chicadeeDescr" />
+            </TableRow>
+
+            <TableRow>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="10dip"
+                    android:id="@+id/chicadeePeriodNext"
+                    android:layout_span="2"/>
+            </TableRow>
+
+            <TableRow>
+                <ImageView
+                    android:layout_width="80dip"
+                    android:layout_height="80dip"
+                    android:paddingLeft="10dip"
+                    android:paddingRight="10dip"
+                    android:id="@+id/chicadeeIconNext" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="5dip"
+                    android:paddingRight="10dip"
+                    android:text="@string/loading"
+                    android:id="@+id/chicadeeDescrNext" />
+            </TableRow>
 
         </TableLayout>
-    </ScrollView>
+    </android.support.v4.widget.NestedScrollView>
+    </android.support.v4.widget.SwipeRefreshLayout>
 </LinearLayout>
