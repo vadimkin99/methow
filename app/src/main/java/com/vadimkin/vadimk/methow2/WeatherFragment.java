@@ -8,6 +8,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -132,8 +133,9 @@ public class WeatherFragment extends Fragment {
         mySwipeRefreshLayout.setOnRefreshListener( new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                refresh();
-                mySwipeRefreshLayout.setRefreshing(false);
+                if (setRefreshCount()) {
+                    refresh();
+                }
             }
         });
         return view;
@@ -145,10 +147,32 @@ public class WeatherFragment extends Fragment {
         refresh();
     }
 
+    private int refreshCount;
+
     private void refresh() {
         new setWeatherFromUrl(tvMazamaPeriod, tvMazamaDescr, ivMazamaIcon, tvMazamaPeriodNext, tvMazamaDescrNext, ivMazamaIconNext).execute(getMazamaUrl());
         new setWeatherFromUrl(tvWinthropPeriod, tvWinthropDescr, ivWinthropIcon, tvWinthropPeriodNext, tvWinthropDescrNext, ivWinthropIconNext).execute(getWinthropUrl());
         new setWeatherFromUrl(tvChicadeePeriod, tvChicadeeDescr, ivChicadeeIcon, tvChicadeePeriodNext, tvChicadeeDescrNext, ivChicadeeIconNext).execute(getChicadeeUrl());
+    }
+
+    synchronized void decRefreshCount() {
+        if (refreshCount > 0) {
+            refreshCount--;
+
+            Log.i(Constants.LOG_TAG, "Refresh count: " + refreshCount);
+            if (refreshCount == 0) {
+                mySwipeRefreshLayout.setRefreshing(false);
+            }
+        }
+    }
+
+    synchronized boolean setRefreshCount() {
+        if (refreshCount > 0) {
+            return false;
+        } else {
+            refreshCount = 3;
+            return true;
+        }
     }
 
     class setWeatherFromUrl extends AsyncTask<String, Void, String> {
@@ -171,11 +195,15 @@ public class WeatherFragment extends Fragment {
         @Override
         protected String doInBackground(String... urls) {
             try {
+                Log.i(Constants.LOG_TAG, "Starting " + urls[0]);
                 URL url = new URL(urls[0]);
                 URLConnection connection = url.openConnection();
                 InputStream inputStream = connection.getInputStream();
                 Scanner s = new Scanner(inputStream).useDelimiter("\\A");
                 String result = s.hasNext() ? s.next() : "";
+                Log.i(Constants.LOG_TAG, "Finished " + urls[0]);
+                decRefreshCount();
+
                 return result;
             } catch (MalformedURLException ex) {
                 return null;
@@ -194,12 +222,14 @@ public class WeatherFragment extends Fragment {
             new setImageFromUrl(ivIconNext).execute(getIconUrlFromWeather(weather, 1));
 
             final MainActivity activity = (MainActivity) getActivity();
-            activity.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    activity.progressBar.setVisibility(View.GONE);
-                }
-            });
+            if (activity != null) {
+                activity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        activity.progressBar.setVisibility(View.GONE);
+                    }
+                });
+            }
         }
     }
 
