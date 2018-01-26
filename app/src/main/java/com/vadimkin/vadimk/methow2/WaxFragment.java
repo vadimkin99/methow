@@ -71,7 +71,7 @@ public class WaxFragment extends Fragment {
         WebView browser = (WebView) view.findViewById(R.id.wax);
         browser.setWebViewClient(new WebViewClient());
         browser.getSettings().setJavaScriptEnabled(true);
-        browser.loadUrl("https://mv-wotd.blogspot.com/");
+        browser.loadUrl("https://wintermaps.com/wax_of_the_day.php/");
 
         return view;
     }
